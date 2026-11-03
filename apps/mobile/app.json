@@ -1,0 +1,20 @@
+{
+  "expo": {
+    "name": "RAV — Reste À Vivre",
+    "slug": "rav-mobile",
+    "version": "1.0.0",
+    "orientation": "portrait",
+    "userInterfaceStyle": "dark",
+    "splash": {
+      "backgroundColor": "#07090E",
+      "resizeMode": "contain"
+    },
+    "ios": {
+      "supportsTablet": false,
+      "bundleIdentifier": "com.fintech.rav"
+    },
+    "android": {
+      "package": "com.fintech.rav"
+    }
+  }
+}

@@ -1,0 +1,231 @@
+CAHIER DES CHARGES FONCTIONNEL &amp; TECHNIQUE
+
+APPLICATION MOBILE DE GESTION PRÉDICTIVE DU RESTE À VIVRE (RAV)« 100% AUTONOME, SANS SYNCHRONISATION BANCAIRE OBLIGATOIRE »
+
+Version &amp; Statut :
+
+Version 1.0 — Document Maître de Référence
+
+Auteur / Rôle :
+
+Direction Produit Fintech &amp; Expertise en Économie Comportementale
+
+Cible Utilisateurs :
+
+Salariés &amp; Professionnels (Économie Formelle et Informelle)
+
+Principes Clés :
+
+Saisie Express (&lt;10s), Zéro Open-Banking requis, Offline-First, IA Embarquée bienveillante
+
+1. CONTEXTE STRATÉGIQUE, DIAGNOSTIC &amp; VISION PRODUIT
+
+★ VISION FONDATRICELe Reste à Vivre (RAV) n'est pas un solde bancaire rétrospectif stérile, mais un actif dynamique disponible amortissable sur une durée définie (le cycle inter-paie). L'application élimine la charge mentale comptable pour devenir le 'CFO de poche' proactif et ultra-attrayant de chaque salarié.
+
+Diagnostic Économique : La quasi-totalité des solutions budgétaires actuelles souffrent de deux écueils majeurs : un taux d'abandon supérieur à 80% après trois semaines (dû à la lourdeur du pointage a posteriori de dizaines de lignes de comptes) et une dépendance rigide à l'Open Banking (API bancaires) qui rebute les utilisateurs soucieux de leur confidentialité, souffre d'instabilités techniques ou s'avère inopérante pour les dépenses en espèces et les paiements mobiles décentralisés.
+
+Objectif du Projet : Développer une application mobile d'excellence ergonomique, 100% autonome (zéro obligation de liaison bancaire), garantissant une saisie instantanée (&lt;10 secondes), une flexibilité totale dans l'arbitrage quotidien, et un accompagnement bienveillant guidé par l'intelligence artificielle.
+
+Cible Utilisateurs : Tout actif rémunéré (salariés du secteur privé/public, indépendants, travailleurs périodiques) percevant un revenu à date fixe ou cyclique et souhaitant sanctuariser leur sécurité financière tout en préservant le plaisir de dépenser.
+
+2. ARCHITECTURE MATHÉMATIQUE DU RESTE À VIVRE (SANS LIAISON BANCAIRE)
+
+2.1. Détermination du RAV Mensuel Initial (RAVm)
+
+Puisqu'aucun flux bancaire n'est extrait automatiquement, l'application s'appuie sur une modélisation déclarative assistée lors de l'onboarding, structurée en 3 variables maîtresses :
+
+Formule Maîtresse : RAVm = Revenus Nets Déclarés - (Charges Fixes Incompressibles + Épargne Sanctuarisée)
+
+• Revenus Nets Déclarés : Salaire mensuel net, compléments, allocations, commissions prévues.• Charges Fixes Incompressibles : Loyer, remboursements de crédit, factures d'énergie, télécoms, abonnements, assurances, frais de scolarité.• Épargne Sanctuarisée (« Pay Yourself First ») : Somme virée automatiquement sur une tirelire dès perception des revenus avant tout début de consommation discrétionnaire.
+
+2.2. Calcul du RAV Quotidien Opérationnel (RAVq) &amp; Lissage Continu
+
+L'indicateur cardinal affiché à l'utilisateur est le montant disponible pour sa journée en cours :
+
+Formule du RAV Quotidien : RAVq = (RAVm - Cumul Dépenses Variables Saisies) / N_jours_restants_cycle
+
+Chaque dépense enregistrée ou chaque passage de minuit recalcule automatiquement le RAV quotidien restant. En cas de dépassement exceptionnel lors d'une journée, le système ne sanctionne pas l'utilisateur mais amortit le déficit sur l'ensemble des jours résiduels du cycle.
+
+2.3. Gestion de l'Asymétrie : Pondération Week-ends &amp; Jours Fériés
+
+Les dépenses en jours ouvrés (routine professionnelle) et en week-ends (sorties, courses familiales, réceptions) ne sont pas homogènes. L'application intègre 3 stratégies mathématiques sélectionnables par l'utilisateur :
+
+Stratégie
+
+Mécanisme Mathématique
+
+Bénéfice Utilisateur
+
+Profil Cible
+
+Approche A : Pondération Dynamique (Défaut)
+
+Poids w = 1.0 (Lun-Ven), w = 2.0 ou 2.5 (Sam-Dim &amp; Fériés). Répartition proportionnelle de l'enveloppe.
+
+Zéro charge mentale : le quota du week-end est doublé naturellement.
+
+Profil standard cherchant la simplicité.
+
+Approche B : Pack Week-end (Coffre Dédié)
+
+Une poche dédiée bloque 40% à 50% du RAV hebdo du lundi au vendredi, et la libère le vendredi à 17h.
+
+Protège les loisirs contre les fuites en semaine.
+
+Profil dépensier en semaine.
+
+Approche C : Rollover Économies
+
+Allocation quotidienne égale. Tout reliquat non consommé en semaine est transféré au pack week-end.
+
+Gamification positive et motivation à l'effort quotidien.
+
+Profil économe / challengeur.
+
+3. FONCTIONNALITÉS CŒUR &amp; DESIGN DE L'INTERACTION (UI/UX)
+
+3.1. Onboarding Express &amp; Définition du Cycle de Paie (Sans Compte Bancaire)
+
+L'onboarding est achevé en 3 étapes visuelles ultra-fluides (moins de 2 minutes) :
+
+1. Cycle de Paie Personnalisé : Choix de la date de versement (ex. du 28 au 27 suivant, ou cycle hebdomadaire/bimensuel). Fin du carcan du mois civil rigide.2. Paramétrage Visuel des Flux : Entrée du revenu net estimé et glissement de curseurs pour les charges fixes et l'épargne sanctuarisée.3. Calibration des Préférences : Choix du mode week-end et activation éventuelle de la réserve de sécurité (5 à 10%).
+
+3.2. Saisie Express « 2-Taps » (&lt;10 secondes) &amp; Mode Clôture
+
+La rétention reposant sur l'absence de friction de saisie, l'application propose deux parcours exclusifs :
+
+• Le Clavier Express (2 Taps) : Depuis l'écran d'accueil, taper le montant (ex. '4.50') puis toucher l'icône de la poche correspondante (ex. [Nourriture 🥗]). Enregistrement instantané sans pop-up de validation supplémentaire.• Le Mode Clôture du Soir : Pour ceux qui ne saisissent pas en journée, notification discrète à 20h30 affichant un récapitulatif modifiable avec ajusteurs rapides (+ / -) pour les 4 poches.
+
+3.3. Architecture Multi-Poches (Règle d'or : Max 4 Poches)
+
+Pour éviter le syndrome de l'application comptable décourageante, le budget journalier est fragmenté en 4 poches claires au maximum :
+
+Poche Budgétaire
+
+Rôle &amp; Nature des Dépenses
+
+Quota Conseillé (% RAVq)
+
+Mécanisme d'Arbitrage
+
+1. Déjeuner / Alimentation
+
+Repas du midi, courses rapides du quotidien.
+
+40% à 45%
+
+Vases communicants automatiques avec Divers si surplus.
+
+2. Transport / Mobilité
+
+Carburant, transports collectifs, VTC, stationnement.
+
+20% à 25%
+
+Report automatique des reliquats non utilisés.
+
+3. Divers / Plaisirs
+
+Cafés, loisirs d'appoint, snacks, micro-achats.
+
+20% à 25%
+
+Possibilité de verrouiller pour préserver le week-end.
+
+4. Coussin d'Imprévus
+
+Tampon de sécurité pour éviter les découverts.
+
+5% à 10%
+
+Absorption automatique des dépassements majeurs.
+
+4. MOTEUR D'INTELLIGENCE ARTIFICIELLE BIENVEILLANTE (HYBRIDE &amp; LOCAL-FIRST)
+
+4.1. Philosophie IA : Le Nudge Positif contre la Culpabilisation
+
+L'IA intégrée ne distribue pas de blâmes financiers. Elle agit comme un conseiller économique personnel de poche qui identifie les fuites invisibles et propose des micro-actions valorisantes.
+
+4.2. Les 4 Niveaux d'Analyse Économique
+
+• Niveau 1 (Charges Fixes Cachées) : Audit des abonnements redondants déclarés, simulation de gain mensuel et conversion directe en RAV quotidien (ex : '+0,80 € de liberté en plus chaque jour').• Niveau 2 (L'Effet « Latte ») : Identification des micro-dépenses cumulatives dans la poche Divers (cafés, collations, livraisons).• Niveau 3 (Asymétrie des Paniers) : Analyse du ratio de consommation début de quinzaine vs fin de quinzaine.• Niveau 4 (Arbitrages &amp; Nudges) : Suggestions de substitution (covoiturage, préparation de repas) réinjectant les gains directement dans le Pack Week-end.
+
+4.3. Architecture Technique Hybride Sécurisée (Zero-Bank, Edge + Cloud)
+
+• Traitement Local (Edge / On-Device) : Toutes les transactions chiffrées, calculs statistiques, écarts-types et analyses de régression s'exécutent en local sur le smartphone via SQLite chiffré.• Traitement Cloud LLM Anonymisé : Seuls des vecteurs de statistiques agrégées abstraites (zéro PII, zéro libellé personnel) sont transmis au LLM compact (Gemini 1.5 Flash ou équivalent) pour générer des conseils sous forme de 'Cartes d'Opportunités' interactives.
+
+5. SPÉCIFICATIONS TECHNIQUES, PERFORMANCE &amp; SÉCURITÉ
+
+Composant
+
+Choix Technologique Recommandé
+
+Justification Économique &amp; Opérationnelle
+
+Frontend Mobile
+
+Flutter (Dart) ou React Native (Expo)
+
+Performance 60 FPS fluide, design ultra-attrayant, base de code unique iOS &amp; Android.
+
+Stockage Local
+
+SQLite / Room avec SQLCipher (AES-256)
+
+Fonctionnement 100% 'Offline-First' sans connexion, synchronisation instantanée.
+
+Backend &amp; API
+
+Node.js (NestJS) ou Go / Fastify
+
+Faible empreinte serveur, scalabilité optimale, latence ultra-faible (&lt;150ms).
+
+Confidentialité
+
+Zero Knowledge Architecture
+
+Aucun identifiant bancaire requis, anonymisation complète des métriques budgétaires.
+
+Design &amp; Ergonomie
+
+Figma Design System (Dark/Light mode)
+
+Jauges circulaires fluides, micro-animations haptiques, pastilles réactives.
+
+6. MODÈLE ÉCONOMIQUE, MONÉTISATION &amp; RENTABILITÉ
+
+Sans s'appuyer sur la vente de données personnelles bancaires, le modèle s'articule autour de 3 leviers éthiques hautement rentables :
+
+1. Modèle Freemium B2C : Version Essentielle gratuite illimitée (calcul RAVq, saisie 2-Taps, mode week-end). Formule Premium à 2,99 €/mois ou 24,99 €/an débloquant l'audit IA complet, la personnalisation illimitée des poches et la simulation prédictive avancée.2. Modèle B2B Corporate Wellness (CSE / DRH) : Vente de licences groupées aux entreprises pour le bien-être financier des salariés, réduisant le stress lié aux fins de mois difficiles.3. Affiliation Contextuelle Éthique : Mise en relation volontaire avec des partenaires de réduction de charges (forfaits télécoms, assurances, micro-épargne) rémunérée à la conversion (20 € à 50 € par souscription validée).
+
+7. FEUILLE DE ROUTE DE DÉPLOIEMENT (ROADMAP MVP)
+
+Phase &amp; Durée
+
+Objectifs Stratégiques
+
+Livrables Clés &amp; Jalons
+
+Phase 1 (Mois 1 - 2)Design &amp; UX Testing
+
+Conception UI/UX attractive, validation de la boucle de saisie &lt;10s sur panel de 50 testeurs.
+
+Design System complet sur Figma, prototype cliquable testé, spécifications finalisées.
+
+Phase 2 (Mois 3 - 4)Développement MVP
+
+Développement du moteur de calcul local (RAVq, poches, week-ends) et de la saisie 2-Taps.
+
+Build iOS/Android Offline-First, persistance SQLite sécurisée, dashboard opérationnel.
+
+Phase 3 (Mois 5)Intégration Brique IA
+
+Connexion de l'analyseur de tendances local et des prompts d'opportunités bienveillants.
+
+Génération des cartes de recommandations IA, système de notifications proactives.
+
+Phase 4 (Mois 6)Bêta &amp; Lancement
+
+Phase pilote fermée (500 utilisateurs), optimisation des KPI de rétention et mise sur les stores.
+
+Lancement commercial App Store &amp; Google Play, mise en route du tunnel Freemium/B2B.

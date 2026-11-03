@@ -1,0 +1,812 @@
+<!DOCTYPE html>
+<html lang="fr">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+  <title>RAV — Application Prédictive du Reste À Vivre</title>
+  <meta name="description"
+    content="Application mobile de gestion prédictive du Reste À Vivre (RAV), 100% autonome sans open-banking obligatoire, saisie express < 10s et base relationnelle PostgreSQL.">
+
+  <!-- Polices Google & Icônes -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link
+    href="https://fonts.googleapis.com/css2?family=Outfit:wght@400;500;600;700;800&family=Plus+Jakarta+Sans:wght@400;500;600;700&family=JetBrains+Mono:wght@500;700&display=swap"
+    rel="stylesheet">
+
+  <!-- Feuille de Style Design System -->
+  <link rel="stylesheet" href="css/style.css">
+</head>
+
+<body>
+
+  <!-- Définitions SVG pour gradients de la jauge -->
+  <svg style="position: absolute; width: 0; height: 0; overflow: hidden;" aria-hidden="true">
+    <defs>
+      <linearGradient id="emeraldCyanGrad" x1="0%" y1="0%" x2="100%" y2="100%">
+        <stop offset="0%" stop-color="#10B981" />
+        <stop offset="100%" stop-color="#06B6D4" />
+      </linearGradient>
+    </defs>
+  </svg>
+
+  <div class="simulator-wrapper">
+    <!-- Barre de contrôle du simulateur pour desktop -->
+    <header class="simulator-controls" aria-label="Contrôles du simulateur">
+      <div class="sim-tag">
+        <span class="pulse-dot"></span>
+        <span>Prototype Mobile 60 FPS</span>
+      </div>
+      <div style="display: flex; gap: 6px;">
+        <button class="sim-btn-toggle" id="btnThemeToggle" title="Basculer Fond Blanc / Mode Nuit">
+          ☀️ Blanc
+        </button>
+        <button class="sim-btn-toggle" id="btnCompactToggle" title="Ajuster la taille pour écran d'ordinateur portable">
+          🔍 Zoom 88%
+        </button>
+        <button class="sim-btn-toggle" id="btnToggleFrame" title="Basculer en plein écran">
+          ⛶ Plein Écran
+        </button>
+      </div>
+    </header>
+
+    <!-- Châssis Smartphone iOS / Android -->
+    <main class="phone-frame" id="phoneContainer">
+      <!-- Dynamic Island / Capteurs -->
+      <div class="notch-container" aria-hidden="true">
+        <div class="notch-sensor"></div>
+        <div class="notch-camera"></div>
+      </div>
+
+      <!-- Barre de Statut Mobile -->
+      <aside class="status-bar" aria-label="Statut du périphérique">
+        <span class="status-time">09:41</span>
+        <div class="status-icons">
+          <span>5G</span>
+          <span>●●●</span>
+          <span>100%</span>
+        </div>
+      </aside>
+
+      <!-- Toast d'alerte / Confirmation instantanée -->
+      <div class="app-toast-alert" id="appToast" role="alert" aria-live="polite">
+        Action enregistrée avec succès
+      </div>
+
+      <!-- Zone de Défilement & Contenu des Écrans -->
+      <div class="app-viewport" id="appViewport">
+
+        <!-- ==========================================
+             ÉCRAN 1 : DASHBOARD PRINCIPAL (CARDINAL)
+             ========================================== -->
+        <section class="screen active" id="screen_dash" aria-label="Tableau de bord">
+          <!-- En-tête Utilisateur -->
+          <div class="dash-header">
+            <div class="user-greeting">
+              <span class="greeting-sub" id="userGreetingSub">Bonjour 👋</span>
+              <h1 class="greeting-title">Reste À Vivre</h1>
+            </div>
+            <div class="header-actions">
+              <button class="currency-select-btn" id="currencySelectBtn" title="Changer de devise">
+                €
+              </button>
+              <button class="btn-icon-soft" id="btnLogoutSimulator" title="Se Déconnecter">
+                🚪
+              </button>
+              <button class="btn-icon-soft" title="Profil & Paramètres"
+                onclick="document.querySelector('.nav-tab-btn[data-screen=\'settings\']').click()">
+                ⚙️
+              </button>
+            </div>
+          </div>
+
+          <!-- Badge Statut du Cycle de Paie -->
+          <div class="cycle-badge-bar">
+            <div class="cycle-days-left" id="cycleDaysLeft">
+              Jour <strong>12 / 30</strong> • Reste <strong>18j</strong>
+            </div>
+            <div class="cycle-mode-pill" id="cycleModePill">
+              Pondéré Week-end (w=2.0)
+            </div>
+          </div>
+
+          <!-- Jauge Circulaire de Reste À Vivre Quotidien (RAVq) -->
+          <div class="hero-gauge-container">
+            <div class="gauge-svg-wrap">
+              <svg class="circular-gauge-svg" viewBox="0 0 230 230">
+                <circle class="gauge-bg-circle" cx="115" cy="115" r="100" />
+                <circle class="gauge-fill-circle" id="gaugeFillCircle" cx="115" cy="115" r="100" />
+              </svg>
+              <div class="gauge-inner-content">
+                <span class="gauge-label">Disponible Aujourd'hui</span>
+                <div class="gauge-amount">
+                  <span id="gaugeAmount">38.40</span>
+                  <span class="gauge-currency" id="gaugeCurrency">€</span>
+                </div>
+                <div class="gauge-status-chip" id="gaugeStatusChip">
+                  ● Dans le vert pour aujourd'hui
+                </div>
+              </div>
+            </div>
+
+            <div class="gauge-stats-row">
+              <span>Dépensé aujourd'hui : <strong id="gaugeSpentToday">12.70 €</strong></span>
+              <span>Alloué : <strong id="gaugeTotalDaily">51.10 €</strong></span>
+            </div>
+          </div>
+
+          <!-- Bouton Déclencheur Saisie Express "2-Taps" (< 10s) -->
+          <div class="quick-entry-cta-bar">
+            <button class="btn-trigger-2taps" id="btnTrigger2Taps">
+              <div class="cta-left-content">
+                <div class="cta-icon-bubble">⚡</div>
+                <span>Saisie Express « 2-Taps »</span>
+              </div>
+              <span class="cta-badge-tag">&lt; 10 sec</span>
+            </button>
+          </div>
+
+          <!-- Déclencheur : Le Bilan de 20h30 (Clôture du Soir) -->
+          <div class="evening-trigger-card" id="btnTriggerEveningRitual" role="button" tabindex="0">
+            <div class="evening-trigger-left">
+              <div class="evening-moon-icon">🌙</div>
+              <div>
+                <div class="evening-trigger-title">Bilan à 20h30 : Clôturer ma journée</div>
+                <div class="evening-trigger-sub">Ajustement rapide des 4 poches & Bilan</div>
+              </div>
+            </div>
+            <span class="evening-trigger-badge">15 sec</span>
+          </div>
+
+          <!-- Les Poches Budgétaires (Dynamiques) -->
+          <div class="section-pockets">
+            <div class="section-head-row">
+              <h2 class="section-head-title" id="pocketsSectionTitle">📁 Vos Poches du Jour</h2>
+              <button class="btn-manage-pockets-trigger" id="btnOpenPocketsManager">
+                ⚙️ Gérer mes poches
+              </button>
+            </div>
+
+            <div class="pockets-grid" id="pocketsGridContainer">
+              <!-- Rendu dynamique via renderPockets() -->
+            </div>
+          </div>
+
+          <!-- Carte Nudge IA Bienveillante -->
+          <div class="ai-nudge-card" id="aiNudgeCard">
+            <div class="nudge-icon-box">💡</div>
+            <div class="nudge-content">
+              <div class="nudge-tag" id="nudgeTitle">Opportunité Week-end ✨</div>
+              <div class="nudge-text" id="nudgeText">
+                Superbe gestion ! Tu as un surplus prévisionnel de 18,20 € aujourd'hui.
+              </div>
+              <div class="nudge-gain" id="nudgeGain">+3.64 €/jour</div>
+            </div>
+          </div>
+
+          <!-- Indicateur Flottant de Défilement vers les 4 Poches & Nudge -->
+          <div class="scroll-down-hint" id="scrollDownHint" title="Défiler vers toutes les poches & conseil IA">
+            <span>↓ 4 Poches & Conseils IA</span>
+          </div>
+
+          <!-- Espace de dégagement au-dessus de la barre de navigation mobile -->
+          <div class="screen-bottom-spacer" aria-hidden="true"></div>
+        </section>
+
+        <!-- ==========================================
+             ÉCRAN 2 : ONBOARDING & CALIBRATION (FLUX)
+             ========================================== -->
+        <section class="screen onboarding-screen" id="screen_settings" aria-label="Paramètres et calibration">
+          <div class="onboarding-header">
+            <h2 class="onboarding-title">Calibration des Flux</h2>
+            <p class="onboarding-desc">
+              Définissez vos revenus et charges déclarées pour calculer votre Reste À Vivre sans liaison bancaire
+              obligatoire.
+            </p>
+          </div>
+
+          <!-- Revenus Nets Déclarés -->
+          <div class="calibration-card">
+            <div class="calibration-card-title">
+              <span>Revenu Net Mensuel</span>
+              <span class="calibration-val-badge"><span id="lblIncome">2 400</span> <span
+                  class="calibration-curr-label">€</span></span>
+            </div>
+            <div class="range-slider-wrap">
+              <input type="range" class="custom-range-slider" id="rangeIncome" min="800" max="8000" step="50"
+                value="2400">
+            </div>
+            <div class="form-field-group">
+              <label class="field-label" for="inputIncome">Saisie directe du salaire (<span
+                  class="calibration-curr-label">€</span>) :</label>
+              <input type="number" class="field-input-box" id="inputIncome" value="2400">
+            </div>
+          </div>
+
+          <!-- Charges Fixes Incompressibles -->
+          <div class="calibration-card">
+            <div class="calibration-card-title">
+              <span>Charges Fixes (Loyer, Factures)</span>
+              <span class="calibration-val-badge"><span id="lblFixed">1 250</span> <span
+                  class="calibration-curr-label">€</span></span>
+            </div>
+            <div class="range-slider-wrap">
+              <input type="range" class="custom-range-slider" id="rangeFixed" min="200" max="5000" step="50"
+                value="1250">
+            </div>
+            <div class="form-field-group">
+              <label class="field-label" for="inputFixed">Montant total des charges fixes (<span
+                  class="calibration-curr-label">€</span>) :</label>
+              <input type="number" class="field-input-box" id="inputFixed" value="1250">
+            </div>
+          </div>
+
+          <!-- Épargne Sanctuarisée -->
+          <div class="calibration-card">
+            <div class="calibration-card-title">
+              <span>Épargne (« Pay Yourself First »)</span>
+              <span class="calibration-val-badge"><span id="lblSavings">200</span> <span
+                  class="calibration-curr-label">€</span></span>
+            </div>
+            <div class="range-slider-wrap">
+              <input type="range" class="custom-range-slider" id="rangeSavings" min="0" max="2000" step="25"
+                value="200">
+            </div>
+            <div class="form-field-group">
+              <label class="field-label" for="inputSavings">Montant épargné au versement (<span
+                  class="calibration-curr-label">€</span>) :</label>
+              <input type="number" class="field-input-box" id="inputSavings" value="200">
+            </div>
+          </div>
+
+          <!-- Cycle de Paie & Date de Versement -->
+          <div class="calibration-card">
+            <div class="calibration-card-title">
+              <span>Date de Paie Personnalisée</span>
+              <span class="calibration-val-badge">Le 28 du mois</span>
+            </div>
+            <div class="form-field-group">
+              <label class="field-label" for="inputPayDay">Jour du versement du salaire (1 à 31) :</label>
+              <input type="number" class="field-input-box" id="inputPayDay" min="1" max="31" value="28">
+            </div>
+          </div>
+
+          <!-- Stratégie Week-end -->
+          <div class="calibration-card">
+            <div class="calibration-card-title">
+              <span>Stratégie Week-end & Loisirs</span>
+            </div>
+            <div class="strategy-cards-col">
+              <div class="strategy-radio-card active" data-strategy="DYNAMIC_WEIGHT">
+                <div class="strategy-radio-circle"></div>
+                <div>
+                  <div class="strategy-card-title">Pondération Dynamique (Recommandée)</div>
+                  <div class="strategy-card-sub">Budget doublé naturellement le week-end (w = 2.0). Zéro charge mentale.
+                  </div>
+                </div>
+              </div>
+              <div class="strategy-radio-card" data-strategy="WEEKEND_PACK">
+                <div class="strategy-radio-circle"></div>
+                <div>
+                  <div class="strategy-card-title">Pack Week-end (Coffre Dédié)</div>
+                  <div class="strategy-card-sub">Bloque 40% du RAV en semaine et libère le pactole le vendredi à 17h.
+                  </div>
+                </div>
+              </div>
+              <div class="strategy-radio-card" data-strategy="ROLLOVER">
+                <div class="strategy-radio-circle"></div>
+                <div>
+                  <div class="strategy-card-title">Rollover Économies</div>
+                  <div class="strategy-card-sub">Montant uniforme : tout reliquat non consommé le soir va au week-end.
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <!-- Aperçu en Direct des Formules -->
+          <div class="rav-preview-box">
+            <div>
+              <div class="preview-item-label">RAVm Calculé</div>
+              <div class="preview-item-val" id="previewRavM">950 €</div>
+            </div>
+            <div style="text-align: right;">
+              <div class="preview-item-label">RAVq Journalier Estimé</div>
+              <div class="preview-item-val" id="previewRavQ" style="color: var(--accent-emerald);">31.67 €/j</div>
+            </div>
+          </div>
+
+          <button class="btn-primary-action" id="btnSaveOnboarding">
+            💾 Sauvegarder & Recalculer mon RAV
+          </button>
+          <div class="screen-bottom-spacer" aria-hidden="true"></div>
+        </section>
+
+        <!-- ==========================================
+             ÉCRAN 4 : AUDIT IA & CHASSE AUX CHARGES FIXES
+             ========================================== -->
+        <section class="screen audit-screen" id="screen_audit" aria-label="Audit IA et optimisation">
+          <div class="onboarding-header" style="margin-bottom: 14px;">
+            <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 4px;">
+              <span class="audit-level-badge">✨ Moteur Bienveillant • Zero-Knowledge</span>
+              <span style="font-size: 11px; color: var(--accent-cyan); font-weight: 700;">Section 4</span>
+            </div>
+            <h2 class="onboarding-title" style="font-size: 20px;">Audit IA & Chasse aux Charges</h2>
+            <p class="onboarding-desc">
+              Convertissez vos abonnements dormants et micro-dépenses en pouvoir d'achat quotidien immédiat.
+            </p>
+          </div>
+
+          <!-- Hero Card : Gain de Liberté Quotidienne -->
+          <div class="audit-hero-card">
+            <div class="audit-hero-label">Gain de Liberté Quotidienne Détecté</div>
+            <div class="audit-hero-amount-row">
+              <span class="audit-hero-amount" id="auditHeroDailyGain">+3.08 €</span>
+              <span style="font-size: 16px; font-weight: 700; color: #FFFFFF;">/ jour</span>
+            </div>
+            <div class="audit-hero-sub">
+              Soit <strong id="auditHeroAnnualGain">+1 109 € / an</strong> réinjectés dans votre Reste À Vivre ou votre
+              Pack Week-end !
+            </div>
+          </div>
+
+          <!-- Niveau 1 : Charges Fixes Cachées & Abonnements -->
+          <div class="audit-section-header">
+            <h3 class="audit-section-title">
+              <span>🎯 Niveau 1 : Abonnements Dormants</span>
+            </h3>
+            <span style="font-size: 11px; color: var(--text-muted);">4 identifiés</span>
+          </div>
+
+          <div class="audit-subs-list" id="auditSubsListContainer">
+            <!-- Rempli dynamiquement avec toggles interactifs -->
+          </div>
+
+          <!-- Niveau 2 : L'Effet Latte (Micro-dépenses) -->
+          <div class="audit-section-header">
+            <h3 class="audit-section-title">
+              <span>☕ Niveau 2 : Diagnostic « Effet Latte »</span>
+            </h3>
+            <span class="audit-level-badge"
+              style="color: var(--accent-amber); border-color: rgba(245,158,11,0.3);">Micro-arbitrages</span>
+          </div>
+
+          <div class="latte-simulator-card">
+            <div class="latte-header">
+              <span class="latte-title">Cafés & Snacks à emporter</span>
+              <span style="font-size: 11px; color: var(--accent-amber); font-weight: 700;">2,20 € / pause</span>
+            </div>
+            <p class="latte-desc">
+              Et si vous prépariez votre café ou snack maison quelques jours par semaine ?
+            </p>
+
+            <div class="latte-slider-row">
+              <div class="latte-slider-label">
+                <span>Fréquence préparée à la maison :</span>
+                <span class="latte-slider-val"><span id="latteDaysVal">3</span> jours / semaine</span>
+              </div>
+              <input type="range" class="custom-range-slider" id="latteSlider" min="0" max="5" step="1" value="3">
+            </div>
+
+            <div class="latte-impact-box">
+              <div>
+                <div class="latte-impact-label">Gain Débloqué pour le Week-end</div>
+                <div style="font-size: 11px; color: var(--text-secondary);">Directement transféré au pot samedi/dimanche
+                </div>
+              </div>
+              <div class="latte-impact-val" id="latteGainDisplay">+28.60 € / mois</div>
+            </div>
+          </div>
+
+          <!-- Bouton Application Directe -->
+          <button class="btn-apply-all-optimizations" id="btnApplyOptimizations">
+            🚀 Injecter ces +<span id="auditBtnGain">3.08</span> €/jour dans mon RAV
+          </button>
+          <div class="screen-bottom-spacer" aria-hidden="true"></div>
+        </section>
+
+        <!-- ==========================================
+             ÉCRAN 3 : HISTORIQUE & ACTIVITÉ (UTILISATEUR)
+             ========================================== -->
+        <section class="screen history-screen" id="screen_history" aria-label="Historique et activité du cycle">
+          <div class="history-header-row">
+            <div>
+              <h2 class="onboarding-title" style="font-size: 20px; margin-bottom: 2px;">Historique & Activité</h2>
+              <span style="font-size: 11.5px; color: var(--text-secondary);">Cycle en cours</span>
+            </div>
+            <div class="cloud-status-badge">
+              <span>☁️ Sécurisé & Synchronisé</span>
+            </div>
+          </div>
+
+          <!-- KPI Cards Résumé -->
+          <div class="history-kpi-row">
+            <div class="history-kpi-card">
+              <div class="history-kpi-label">Dépensé ce Cycle</div>
+              <div class="history-kpi-val" id="histKpiCycle">12.70 €</div>
+            </div>
+            <div class="history-kpi-card">
+              <div class="history-kpi-label">Aujourd'hui</div>
+              <div class="history-kpi-val" id="histKpiToday" style="color: var(--accent-emerald);">12.70 €</div>
+            </div>
+          </div>
+
+          <!-- Filtres par poche -->
+          <div class="history-filters-bar">
+            <button class="filter-pill-btn active" data-filter="ALL">Toutes</button>
+            <button class="filter-pill-btn" data-filter="pocket_food">🥗 Repas</button>
+            <button class="filter-pill-btn" data-filter="pocket_transport">🚗 Transport</button>
+            <button class="filter-pill-btn" data-filter="pocket_pleasure">☕ Plaisirs</button>
+            <button class="filter-pill-btn" data-filter="pocket_cushion">🛡️ Coussin</button>
+          </div>
+
+          <!-- Liste des Dépenses Récentes -->
+          <div id="historyListContainer">
+            <!-- Rempli dynamiquement -->
+          </div>
+          <div class="screen-bottom-spacer" aria-hidden="true"></div>
+        </section>
+
+      </div>
+
+      <!-- ==========================================
+           MODAL CLAVIER EXPRESS "2-TAPS" (< 10 SECONDES)
+           ========================================== -->
+      <div class="numpad-modal-overlay" id="numpadModal" role="dialog" aria-modal="true"
+        aria-label="Saisie rapide de dépense">
+        <div class="numpad-top-bar">
+          <span class="numpad-title">⚡ Saisie Express « 2-Taps »</span>
+          <button class="btn-close-numpad" id="btnCloseNumpad" title="Fermer le clavier">✕</button>
+        </div>
+
+        <!-- Étape 1 : Entrée du montant -->
+        <div class="amount-display-zone">
+          <div class="amount-input-visual">
+            <span id="numpadAmountDisplay">0</span>
+            <span class="amount-currency-label" id="numpadCurrencyLabel">€</span>
+          </div>
+          <span class="amount-helper-hint">1. Tapez le montant • 2. Touchez une poche ci-dessous</span>
+        </div>
+
+        <!-- Puces rapides (+1.50€ café, +8.50€ repas...) -->
+        <div class="quick-chips-row">
+          <button class="quick-chip" data-amount="1.50">☕ +1.50</button>
+          <button class="quick-chip" data-amount="8.50">🥪 +8.50</button>
+          <button class="quick-chip" data-amount="15.00">🛒 +15.00</button>
+          <button class="quick-chip" data-amount="30.00">⛽ +30.00</button>
+        </div>
+
+        <!-- Le Pavé Numérique Rapide -->
+        <div class="numpad-grid">
+          <button class="numpad-key" data-val="1">1</button>
+          <button class="numpad-key" data-val="2">2</button>
+          <button class="numpad-key" data-val="3">3</button>
+          <button class="numpad-key" data-val="4">4</button>
+          <button class="numpad-key" data-val="5">5</button>
+          <button class="numpad-key" data-val="6">6</button>
+          <button class="numpad-key" data-val="7">7</button>
+          <button class="numpad-key" data-val="8">8</button>
+          <button class="numpad-key" data-val="9">9</button>
+          <button class="numpad-key" data-val=".">.</button>
+          <button class="numpad-key" data-val="0">0</button>
+          <button class="numpad-key key-action" data-action="backspace" title="Effacer">⌫</button>
+        </div>
+
+        <!-- Étape 2 : Le 2ème Tap = Choix direct de la poche pour validation instantanée ! -->
+        <div class="second-tap-selection-zone">
+          <div class="second-tap-title">👉 2ème TAP : ENREGISTRER DIRECTEMENT DANS :</div>
+          <div class="pockets-direct-validate-grid" id="numpadPocketsContainer">
+            <!-- Rendu dynamique via renderNumpadPockets() -->
+          </div>
+        </div>
+      </div>
+
+      <!-- ==========================================
+           MODAL DE CLÔTURE DU SOIR (BILAN 20H30)
+           ========================================== -->
+      <div class="evening-modal-overlay" id="eveningRitualModal" role="dialog" aria-modal="true"
+        aria-label="Bilan du soir">
+        <div class="evening-top-bar">
+          <div class="evening-title-col">
+            <span class="evening-title-badge">Le Bilan de 20h30 🌙</span>
+            <h2 class="evening-main-title">Clôture de la Journée</h2>
+          </div>
+          <button class="btn-close-evening" id="btnCloseEvening" title="Fermer">✕</button>
+        </div>
+
+        <p class="evening-intro-text">
+          Pas eu le temps de noter vos dépenses ? Ajustez vos 4 poches en quelques secondes. Vos charges fixes et votre
+          épargne restent 100% protégées.
+        </p>
+
+        <!-- Les 4 Ajusteurs Rapides -->
+        <div class="evening-adjusters-container">
+          <!-- Ajusteur Repas -->
+          <div class="evening-adjuster-card">
+            <div class="evening-adj-left">
+              <span class="evening-adj-icon">🥗</span>
+              <div>
+                <div class="evening-adj-name">Repas & Courses</div>
+                <div class="evening-adj-allocated">Alloué : <span id="adjAllocFood">20.40 €</span></div>
+              </div>
+            </div>
+            <div class="evening-adj-controls">
+              <button class="evening-step-btn" data-pocket="pocket_food" data-delta="-5">-5</button>
+              <button class="evening-step-btn" data-pocket="pocket_food" data-delta="-1">-1</button>
+              <span class="evening-adj-val-display" id="adjVal_pocket_food">0.00 €</span>
+              <button class="evening-step-btn" data-pocket="pocket_food" data-delta="1">+1</button>
+              <button class="evening-step-btn" data-pocket="pocket_food" data-delta="5">+5</button>
+            </div>
+          </div>
+
+          <!-- Ajusteur Transport -->
+          <div class="evening-adjuster-card">
+            <div class="evening-adj-left">
+              <span class="evening-adj-icon">🚗</span>
+              <div>
+                <div class="evening-adj-name">Mobilité & Trajets</div>
+                <div class="evening-adj-allocated">Alloué : <span id="adjAllocTransport">10.20 €</span></div>
+              </div>
+            </div>
+            <div class="evening-adj-controls">
+              <button class="evening-step-btn" data-pocket="pocket_transport" data-delta="-5">-5</button>
+              <button class="evening-step-btn" data-pocket="pocket_transport" data-delta="-1">-1</button>
+              <span class="evening-adj-val-display" id="adjVal_pocket_transport">0.00 €</span>
+              <button class="evening-step-btn" data-pocket="pocket_transport" data-delta="1">+1</button>
+              <button class="evening-step-btn" data-pocket="pocket_transport" data-delta="5">+5</button>
+            </div>
+          </div>
+
+          <!-- Ajusteur Plaisirs -->
+          <div class="evening-adjuster-card">
+            <div class="evening-adj-left">
+              <span class="evening-adj-icon">☕</span>
+              <div>
+                <div class="evening-adj-name">Plaisirs & Cafés</div>
+                <div class="evening-adj-allocated">Alloué : <span id="adjAllocPleasure">12.80 €</span></div>
+              </div>
+            </div>
+            <div class="evening-adj-controls">
+              <button class="evening-step-btn" data-pocket="pocket_pleasure" data-delta="-5">-5</button>
+              <button class="evening-step-btn" data-pocket="pocket_pleasure" data-delta="-1">-1</button>
+              <span class="evening-adj-val-display" id="adjVal_pocket_pleasure">0.00 €</span>
+              <button class="evening-step-btn" data-pocket="pocket_pleasure" data-delta="1">+1</button>
+              <button class="evening-step-btn" data-pocket="pocket_pleasure" data-delta="5">+5</button>
+            </div>
+          </div>
+
+          <!-- Ajusteur Coussin -->
+          <div class="evening-adjuster-card">
+            <div class="evening-adj-left">
+              <span class="evening-adj-icon">🛡️</span>
+              <div>
+                <div class="evening-adj-name">Coussin Sécurité</div>
+                <div class="evening-adj-allocated">Alloué : <span id="adjAllocCushion">7.70 €</span></div>
+              </div>
+            </div>
+            <div class="evening-adj-controls">
+              <button class="evening-step-btn" data-pocket="pocket_cushion" data-delta="-5">-5</button>
+              <button class="evening-step-btn" data-pocket="pocket_cushion" data-delta="-1">-1</button>
+              <span class="evening-adj-val-display" id="adjVal_pocket_cushion">0.00 €</span>
+              <button class="evening-step-btn" data-pocket="pocket_cushion" data-delta="1">+1</button>
+              <button class="evening-step-btn" data-pocket="pocket_cushion" data-delta="5">+5</button>
+            </div>
+          </div>
+        </div>
+
+        <!-- Bilan Dynamique Gratifiant -->
+        <div class="evening-outcome-box" id="eveningOutcomeBox">
+          <div class="evening-outcome-header">
+            <span class="evening-outcome-title" id="eveningOutcomeTitle">Bravo ! Économies Réalisées ✨</span>
+            <span class="evening-outcome-amount" id="eveningOutcomeAmount">+12.40 €</span>
+          </div>
+          <p class="evening-outcome-desc" id="eveningOutcomeDesc">
+            Excellente maîtrise aujourd'hui ! Vous avez consommé moins que votre RAV quotidien.
+          </p>
+        </div>
+
+        <!-- Actions Clôture -->
+        <div class="evening-actions-col">
+          <button class="btn-evening-weekend-transfer" id="btnEveningTransferWeekend">
+            🏖️ Transférer mes économies au Pack Week-end
+          </button>
+          <button class="btn-evening-confirm" id="btnEveningConfirm">
+            ✨ Valider ma Journée & Clôturer
+          </button>
+        </div>
+
+        <!-- Espaceur de défilement sécurisé pour bords arrondis du châssis -->
+        <div class="evening-bottom-spacer" aria-hidden="true"></div>
+      </div>
+
+      <!-- ==========================================
+           MODAL DE GESTION DYNAMIQUE DES POCHES
+           ========================================== -->
+      <div class="pockets-modal-overlay" id="pocketsManagerModal" role="dialog" aria-modal="true"
+        aria-label="Gestion des poches">
+        <div class="pockets-modal-header">
+          <div>
+            <span class="pockets-modal-badge">RÉPARTITION DYNAMIQUE 📁</span>
+            <h2 class="pockets-modal-title">Gérer mes Poches</h2>
+          </div>
+          <button class="btn-close-pockets-modal" id="btnClosePocketsManager" title="Fermer">✕</button>
+        </div>
+
+        <!-- Jauge d'Allocation Totale -->
+        <div class="pockets-total-bar-card" id="pocketsTotalCard">
+          <div class="pockets-total-row">
+            <span class="pockets-total-label">Total Alloué</span>
+            <span class="pockets-total-val" id="pocketsTotalPctDisplay">100%</span>
+          </div>
+          <div class="pockets-track">
+            <div class="pockets-bar-fill" id="pocketsTotalProgressBar" style="width: 100%;"></div>
+          </div>
+          <div class="pockets-total-status" id="pocketsTotalStatusMsg">Parfait ! 100% de votre RAV est réparti.</div>
+        </div>
+
+        <!-- Liste des Poches Configurées -->
+        <div class="pockets-config-list" id="pocketsConfigList">
+          <!-- Rempli par renderPocketsManager() -->
+        </div>
+
+        <!-- Bouton Équilibrer Automatiquement -->
+        <button type="button" class="btn-auto-rebalance" id="btnAutoRebalancePockets">
+          ⚖️ Équilibrer automatiquement avec le Coussin
+        </button>
+
+        <!-- Formulaire d'ajout d'une nouvelle poche -->
+        <div class="add-pocket-box" id="addPocketBox">
+          <div class="add-pocket-title">➕ Créer une nouvelle poche</div>
+
+          <div class="add-pocket-field">
+            <label class="add-pocket-label">Nom de la poche</label>
+            <input type="text" class="add-pocket-input" id="newPocketNameInput"
+              placeholder="Ex: Animaux 🐾, Sorties, Bébé..." maxlength="30" />
+          </div>
+
+          <div class="add-pocket-field">
+            <label class="add-pocket-label">Choisir une icône</label>
+            <div class="emoji-picker-row" id="emojiPickerRow">
+              <button type="button" class="emoji-btn active" data-emoji="🛒">🛒</button>
+              <button type="button" class="emoji-btn" data-emoji="👶">👶</button>
+              <button type="button" class="emoji-btn" data-emoji="🐕">🐕</button>
+              <button type="button" class="emoji-btn" data-emoji="🎮">🎮</button>
+              <button type="button" class="emoji-btn" data-emoji="🏋️">🏋️</button>
+              <button type="button" class="emoji-btn" data-emoji="📚">📚</button>
+              <button type="button" class="emoji-btn" data-emoji="🛍️">🛍️</button>
+              <button type="button" class="emoji-btn" data-emoji="✈️">✈️</button>
+              <button type="button" class="emoji-btn" data-emoji="💊">💊</button>
+              <button type="button" class="emoji-btn" data-emoji="🎉">🎉</button>
+            </div>
+          </div>
+
+          <div class="add-pocket-field">
+            <label class="add-pocket-label">Pourcentage alloué initial : <span
+                id="newPocketPctDisplay">15%</span></label>
+            <input type="range" class="custom-range-slider" id="newPocketPctSlider" min="5" max="50" step="5"
+              value="15" />
+          </div>
+
+          <button type="button" class="btn-create-pocket-submit" id="btnSubmitCreatePocket">
+            ✨ Enregistrer ma Nouvelle Poche
+          </button>
+        </div>
+
+        <div class="evening-bottom-spacer" aria-hidden="true"></div>
+      </div>
+
+      <!-- ==========================================
+           ÉCRAN / MODAL D'AUTHENTIFICATION LOCAL
+           ========================================== -->
+      <div class="auth-modal-overlay" id="authModal" role="dialog" aria-modal="true" aria-label="Authentification">
+        <div class="auth-card-wrapper">
+          <div class="auth-brand-badge">
+            <div class="auth-brand-icon">🛡️</div>
+            <h2 class="auth-brand-name">RAV</h2>
+            <span class="auth-brand-tag">Reste À Vivre Prédictif</span>
+            <span class="auth-privacy-pill">Zero Open-Banking • PostgreSQL</span>
+          </div>
+
+          <div class="auth-tabs">
+            <button class="auth-tab active" id="tabAuthLogin">Connexion</button>
+            <button class="auth-tab" id="tabAuthRegister">Créer un compte</button>
+          </div>
+
+          <div class="auth-error-box" id="authErrorBox" style="display: none;">
+            <span id="authErrorText">⚠️ Identifiants incorrects</span>
+          </div>
+
+          <form id="authForm" onsubmit="return false;">
+            <div class="auth-field-group">
+              <div class="auth-label-row">
+                <label class="auth-label" id="authIdentifierLabel" for="authIdentifierInput">Pseudo ou Email</label>
+                <span class="auth-hint-pill">Sans email requis</span>
+              </div>
+              <input type="text" class="auth-input" id="authIdentifierInput" placeholder="Ex: alexandre ou odjira"
+                value="" required />
+            </div>
+
+            <div class="auth-field-group">
+              <label class="auth-label" for="authPasswordInput">Mot de Passe</label>
+              <input type="password" class="auth-input" id="authPasswordInput" placeholder="••••••••••••" value=""
+                required />
+            </div>
+
+            <div class="auth-field-group" id="authCurrencyGroup" style="display: none;">
+              <label class="auth-label">Devise Principale</label>
+              <div class="auth-currency-row">
+                <button type="button" class="auth-curr-btn active" data-curr="EUR">EUR (€)</button>
+                <button type="button" class="auth-curr-btn" data-curr="FCFA">FCFA</button>
+                <button type="button" class="auth-curr-btn" data-curr="USD">USD ($)</button>
+                <button type="button" class="auth-curr-btn" data-curr="CHF">CHF</button>
+              </div>
+
+              <!-- Configuration des 4 Poches Initiales à l'inscription -->
+              <div class="auth-pockets-setup" id="authPocketsSetup">
+                <div class="auth-pockets-header">
+                  <span class="auth-label">Vos 4 Poches Initiales</span>
+                  <span class="auth-pockets-total-badge" id="authPocketsTotalBadge">100% ✅</span>
+                </div>
+                <p class="auth-pockets-sub">Ajustez la répartition de votre futur reste à vivre :</p>
+
+                <div class="auth-pockets-list" id="authPocketsList">
+                  <!-- Rempli dynamiquement -->
+                </div>
+
+                <button type="button" class="btn-auth-rebalance" id="btnAuthAutoRebalance">
+                  ⚖️ Équilibrer automatiquement à 100%
+                </button>
+              </div>
+            </div>
+
+            <button type="submit" class="btn-auth-submit" id="btnAuthSubmit">
+              Se Connecter ⚡
+            </button>
+          </form>
+
+          <div class="auth-demo-shortcuts">
+            <button type="button" class="auth-chip-demo" id="btnDemoPseudo">
+              💡 Compte Démo ("alexandre")
+            </button>
+            <button type="button" class="auth-chip-demo" id="btnDemoEmail">
+              📧 Démo Email
+            </button>
+          </div>
+
+          <p class="auth-footer-privacy">
+            🔒 Vos finances restent 100% anonymes et privées. Aucune synchronisation bancaire obligatoire.
+          </p>
+        </div>
+      </div>
+
+      <!-- Dock Inférieur / Navigation Principale -->
+      <nav class="bottom-dock-nav" aria-label="Navigation principale de l'application">
+        <button class="nav-tab-btn active" data-screen="dash">
+          <span class="nav-tab-icon">📊</span>
+          <span class="nav-tab-label">RAV</span>
+        </button>
+        <button class="nav-tab-btn" data-screen="settings">
+          <span class="nav-tab-icon">🎚️</span>
+          <span class="nav-tab-label">Flux</span>
+        </button>
+        <button class="nav-tab-btn" data-screen="audit">
+          <span class="nav-tab-icon">💡</span>
+          <span class="nav-tab-label">Audit IA</span>
+        </button>
+        <button class="nav-tab-btn" data-screen="history">
+          <span class="nav-tab-icon">📜</span>
+          <span class="nav-tab-label">Activité</span>
+        </button>
+      </nav>
+
+      <!-- Barre d'accueil iOS (Home Indicator) -->
+      <div class="home-indicator" aria-hidden="true"></div>
+    </main>
+  </div>
+
+  <!-- Script d'orchestration ES6 Module -->
+  <script type="module" src="js/app.js"></script>
+</body>
+
+</html>

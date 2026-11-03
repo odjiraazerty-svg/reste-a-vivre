@@ -1,0 +1,29 @@
+{
+  "name": "rav-monorepo",
+  "version": "1.0.0",
+  "private": true,
+  "description": "Monorepo pour l'application SaaS & Mobile de Reste À Vivre (RAV)",
+  "workspaces": [
+    "packages/*",
+    "apps/*"
+  ],
+  "scripts": {
+    "dev:server": "npm run dev --workspace=@rav/server",
+    "dev:mobile": "npm run start --workspace=@rav/mobile",
+    "build:engine": "npm run build --workspace=@rav/engine",
+    "db:migrate": "npm run db:migrate --workspace=@rav/server",
+    "db:up": "docker compose up -d",
+    "db:down": "docker compose down",
+    "db:logs": "docker compose logs -f postgres"
+  },
+  "keywords": [
+    "fintech",
+    "reste-a-vivre",
+    "offline-first",
+    "postgresql",
+    "react-native",
+    "fastify"
+  ],
+  "author": "Direction Produit Fintech",
+  "license": "MIT"
+}
