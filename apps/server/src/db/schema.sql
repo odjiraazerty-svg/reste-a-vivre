@@ -8,7 +8,8 @@ CREATE EXTENSION IF NOT EXISTS "uuid-ossp";
 -- 1. Table Utilisateurs
 CREATE TABLE IF NOT EXISTS users (
     id UUID PRIMARY KEY DEFAULT uuid_generate_v4(),
-    email VARCHAR(255) UNIQUE NOT NULL,
+    email VARCHAR(255) UNIQUE,
+    username VARCHAR(100) UNIQUE,
     password_hash VARCHAR(255) NOT NULL,
     currency VARCHAR(10) DEFAULT 'EUR',
     weekend_strategy VARCHAR(30) DEFAULT 'DYNAMIC_WEIGHT', -- DYNAMIC_WEIGHT, WEEKEND_PACK, ROLLOVER
