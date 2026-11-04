@@ -1,7 +1,7 @@
 import { Platform } from 'react-native';
 import { StorageService, StoredUser } from './storage';
 
-// Adresse de l'API Fastify en Production Cloud (Render.com + Neon.tech PostgreSQL)
+// URL de l'API Fastify en Production Cloud (Render.com + Neon.tech)
 function resolveApiBaseUrl(): string {
   return 'https://reste-a-vivre.onrender.com/api/v1';
 }
