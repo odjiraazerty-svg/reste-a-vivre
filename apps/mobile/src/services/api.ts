@@ -1,9 +1,9 @@
 import { Platform } from 'react-native';
 import { StorageService, StoredUser } from './storage';
 
-// Adresse de l'API Fastify sur le réseau Wi-Fi local
+// Adresse de l'API Fastify en Production Cloud (Render.com + Neon.tech PostgreSQL)
 function resolveApiBaseUrl(): string {
-  return 'http://192.168.2.60:4000/api/v1';
+  return 'https://reste-a-vivre.onrender.com/api/v1';
 }
 
 export const API_BASE_URL = resolveApiBaseUrl();
