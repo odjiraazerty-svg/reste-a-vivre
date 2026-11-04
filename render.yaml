@@ -1,0 +1,17 @@
+services:
+  - type: web
+    name: rav-api
+    runtime: node
+    plan: free
+    region: frankfurt
+    buildCommand: npm install && npm run build:engine && npm run build --workspace=@rav/server
+    startCommand: npm run start --workspace=@rav/server
+    envVars:
+      - key: DATABASE_URL
+        value: postgresql://neondb_owner:npg_m1UBax7ufzie@ep-curly-block-ba753e1u-pooler.c-8.eu-central-1.aws.neon.tech/neondb?sslmode=require
+      - key: JWT_SECRET
+        value: super_cle_secrete_jwt_rav_fintech_production_2026
+      - key: PORT
+        value: 10000
+      - key: HOST
+        value: 0.0.0.0
