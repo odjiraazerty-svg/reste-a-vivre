@@ -26,8 +26,8 @@ jobs:
           distribution: 'temurin'
           java-version: '17'
 
-      - name: 🤖 Configuration Android SDK
-        uses: android-actions/setup-android@v3
+      - name: 📝 Accepter les licences Android
+        run: yes | $ANDROID_HOME/cmdline-tools/latest/bin/sdkmanager --licenses || true
 
       - name: 📦 Installer les dépendances
         run: npm install
