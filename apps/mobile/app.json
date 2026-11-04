@@ -14,7 +14,8 @@
       "bundleIdentifier": "com.fintech.rav"
     },
     "android": {
-      "package": "com.fintech.rav"
+      "package": "com.fintech.rav",
+      "usesCleartextTraffic": true
     }
   }
 }
