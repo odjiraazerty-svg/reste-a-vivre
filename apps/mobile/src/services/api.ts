@@ -3,7 +3,7 @@ import { StorageService, StoredUser } from './storage';
 
 // Adresse de l'API Fastify sur le réseau Wi-Fi local
 function resolveApiBaseUrl(): string {
-  return 'http://192.168.1.170:4000/api/v1';
+  return 'http://192.168.2.60:4000/api/v1';
 }
 
 export const API_BASE_URL = resolveApiBaseUrl();
