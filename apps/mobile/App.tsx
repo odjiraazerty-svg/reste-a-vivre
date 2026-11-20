@@ -161,7 +161,7 @@ function MainApp() {
           style={[styles.dockBtn, activeTab === 'SETTINGS' && styles.dockBtnActive]}
           onPress={() => setActiveTab('SETTINGS')}
         >
-          <Text style={styles.dockIcon}>🔄</Text>
+          <Text style={styles.dockIcon}>⚖️</Text>
           <Text style={[
             styles.dockLabel,
             { color: activeTab === 'SETTINGS' ? themeColors.accentEmerald : themeColors.textMuted },
