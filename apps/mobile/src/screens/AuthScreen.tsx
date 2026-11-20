@@ -146,7 +146,7 @@ export const AuthScreen: React.FC<AuthScreenProps> = ({ onAuthSuccess }) => {
           </View>
           <Text style={[styles.appName, { color: themeColors.textPrimary }]}>Budgéo</Text>
           <Text style={[styles.appSubtitle, { color: themeColors.textSecondary }]}>Budget Prédictif</Text>
-          <Text style={styles.securityTag}>100% Autonome • Zero Open-Banking • PostgreSQL</Text>
+          <Text style={styles.securityTag}>100% Autonome • Zero Open-Banking</Text>
         </View>
 
         {/* Carte de Formulaire */}
