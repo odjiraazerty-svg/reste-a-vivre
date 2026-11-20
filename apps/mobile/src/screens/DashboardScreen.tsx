@@ -203,7 +203,7 @@ export const DashboardScreen: React.FC<{ navigation?: any; currentUser?: any }> 
             <Text style={[styles.greetingSub, { color: themeColors.textSecondary }]}>
               {userName ? `Bonjour ${userName} 👋` : 'Bonjour 👋'}
             </Text>
-            <Text style={[styles.greetingTitle, { color: themeColors.textPrimary }]}>Reste À Vivre</Text>
+            <Text style={[styles.greetingTitle, { color: themeColors.textPrimary }]}>Budgéo</Text>
           </View>
           <View style={{ flexDirection: 'row', gap: 6, alignItems: 'center' }}>
             <View style={[

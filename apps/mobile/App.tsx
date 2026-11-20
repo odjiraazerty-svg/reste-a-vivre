@@ -154,7 +154,7 @@ function MainApp() {
             styles.dockLabel,
             { color: activeTab === 'DASH' ? themeColors.accentEmerald : themeColors.textMuted },
             activeTab === 'DASH' && styles.dockLabelActive
-          ]}>RAV</Text>
+          ]}>Budgéo</Text>
         </TouchableOpacity>
 
         <TouchableOpacity

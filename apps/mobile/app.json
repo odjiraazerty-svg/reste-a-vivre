@@ -1,7 +1,7 @@
 {
   "expo": {
-    "name": "RAV — Reste À Vivre",
-    "slug": "rav-mobile",
+    "name": "Budgéo",
+    "slug": "budgeo",
     "version": "1.0.0",
     "orientation": "portrait",
     "userInterfaceStyle": "dark",
@@ -11,10 +11,10 @@
     },
     "ios": {
       "supportsTablet": false,
-      "bundleIdentifier": "com.fintech.rav"
+      "bundleIdentifier": "com.fintech.budgeo"
     },
     "android": {
-      "package": "com.fintech.rav",
+      "package": "com.fintech.budgeo",
       "usesCleartextTraffic": true
     }
   }

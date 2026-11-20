@@ -43,7 +43,7 @@ server.decorate('authenticate', async (request: FastifyRequest, reply: FastifyRe
 server.get('/health', async () => {
   return {
     status: 'ONLINE',
-    service: 'RAV API Backend',
+    service: 'Budgéo API Backend',
     database: 'PostgreSQL 16+',
     timestamp: new Date().toISOString()
   };
@@ -63,7 +63,7 @@ const HOST = process.env.HOST || '0.0.0.0';
 const start = async () => {
   try {
     await server.listen({ port: PORT, host: HOST });
-    console.log(`\n🚀 API Backend RAV prête sur http://localhost:${PORT}`);
+    console.log(`\n🚀 API Backend Budgéo prête sur http://localhost:${PORT}`);
     console.log(`📡 Endpoints :`);
     console.log(`   - GET  /health`);
     console.log(`   - POST /api/v1/auth/register & /login`);

@@ -144,7 +144,7 @@ export const AuthScreen: React.FC<AuthScreenProps> = ({ onAuthSuccess }) => {
           <View style={styles.logoBadge}>
             <Text style={styles.logoIcon}>🛡️</Text>
           </View>
-          <Text style={[styles.appName, { color: themeColors.textPrimary }]}>RAV</Text>
+          <Text style={[styles.appName, { color: themeColors.textPrimary }]}>Budgéo</Text>
           <Text style={[styles.appSubtitle, { color: themeColors.textSecondary }]}>Reste À Vivre Prédictif</Text>
           <Text style={styles.securityTag}>100% Autonome • Zero Open-Banking • PostgreSQL</Text>
         </View>
@@ -312,7 +312,7 @@ export const AuthScreen: React.FC<AuthScreenProps> = ({ onAuthSuccess }) => {
               <ActivityIndicator color="#FFFFFF" />
             ) : (
               <Text style={styles.submitBtnText}>
-                {isLoginMode ? 'Se Connecter ⚡' : 'Créer mon Espace RAV ✨'}
+                {isLoginMode ? 'Se Connecter ⚡' : 'Créer mon Espace Budgéo ✨'}
               </Text>
             )}
           </TouchableOpacity>
