@@ -93,7 +93,7 @@ export const CalibrationScreen: React.FC<{ currentUser?: any; onCalibrationSaved
   const handleSave = async () => {
     try {
       Haptics.impactAsync(Haptics.ImpactFeedbackStyle.Medium);
-    } catch (e) {}
+    } catch (e) { }
 
     setIsSaving(true);
     setSaveSuccessMsg(null);
@@ -128,7 +128,7 @@ export const CalibrationScreen: React.FC<{ currentUser?: any; onCalibrationSaved
 
       try {
         Haptics.notificationAsync(Haptics.NotificationFeedbackType.Success);
-      } catch (e) {}
+      } catch (e) { }
 
       setSaveSuccessMsg(
         `Flux enregistrés avec succès ! Votre Budget est désormais de ${computedDailyRav} ${currency} / jour (${ravm.toFixed(2)} ${currency} sur le cycle).`
@@ -241,7 +241,7 @@ export const CalibrationScreen: React.FC<{ currentUser?: any; onCalibrationSaved
                 }
               ]}
               onPress={() => {
-                try { Haptics.impactAsync(Haptics.ImpactFeedbackStyle.Light); } catch(e){}
+                try { Haptics.impactAsync(Haptics.ImpactFeedbackStyle.Light); } catch (e) { }
                 setTheme('dark');
               }}
               activeOpacity={0.8}
@@ -270,7 +270,7 @@ export const CalibrationScreen: React.FC<{ currentUser?: any; onCalibrationSaved
                 }
               ]}
               onPress={() => {
-                try { Haptics.impactAsync(Haptics.ImpactFeedbackStyle.Light); } catch(e){}
+                try { Haptics.impactAsync(Haptics.ImpactFeedbackStyle.Light); } catch (e) { }
                 setTheme('light');
               }}
               activeOpacity={0.8}
@@ -309,12 +309,12 @@ export const CalibrationScreen: React.FC<{ currentUser?: any; onCalibrationSaved
         {/* Preview Direct */}
         <View style={[styles.previewBox, { backgroundColor: isDark ? 'rgba(16, 185, 129, 0.08)' : 'rgba(16, 185, 129, 0.12)', borderColor: themeColors.borderSubtle }]}>
           <View>
-            <Text style={[styles.previewLabel, { color: themeColors.textMuted }]}>RAVm Mensuel</Text>
+            <Text style={[styles.previewLabel, { color: themeColors.textMuted }]}>Budget Mensuel</Text>
             <Text style={[styles.previewVal, { color: themeColors.textPrimary }]}>{ravm.toFixed(2)} {currency}</Text>
           </View>
           <View style={{ alignItems: 'flex-end' }}>
             <Text style={[styles.previewLabel, { color: themeColors.textMuted }]}>
-              {isWeekend && strategy === 'DYNAMIC_WEIGHT' ? "RAVq Aujourd'hui (Week-end x2)" : "RAVq Journalier Estimé"}
+              {isWeekend && strategy === 'DYNAMIC_WEIGHT' ? "Budget Aujourd'hui (Week-end x2)" : "Budget Journalier Estimé"}
             </Text>
             <Text style={[styles.previewVal, { color: isWeekend && strategy === 'DYNAMIC_WEIGHT' ? themeColors.accentViolet : themeColors.accentEmerald }]}>
               {dailyRavToday.toFixed(2)} {currency}/j
