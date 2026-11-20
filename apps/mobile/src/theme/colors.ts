@@ -36,57 +36,57 @@ export interface ColorPalette {
 }
 
 export const darkColors: ColorPalette = {
-  bgDeep: '#07090E',
-  bgSurface: '#0E131F',
-  bgCard: 'rgba(19, 26, 42, 0.85)',
-  bgCardHover: '#1C263E',
-  bgInput: '#141C2E',
+  bgDeep: '#060E1E',        // Bleu nuit profond (palette officielle Budgeo)
+  bgSurface: '#0B1936',     // Surface marine
+  bgCard: 'rgba(14, 28, 58, 0.88)', // Carte bleu nuit translucide
+  bgCardHover: '#152952',
+  bgInput: '#0F2144',       // Input bleu nuit
 
-  accentEmerald: '#10B981',
-  accentEmeraldGlow: 'rgba(16, 185, 129, 0.25)',
-  accentCyan: '#06B6D4',
-  accentCyanGlow: 'rgba(6, 182, 212, 0.25)',
-  accentViolet: '#8B5CF6',
-  accentAmber: '#F59E0B',
+  accentEmerald: '#25509F', // Bleu Royal Officiel Budgeo (boutons et onglets actifs)
+  accentEmeraldGlow: 'rgba(37, 80, 159, 0.35)',
+  accentCyan: '#38BDF8',    // Cyan ciel
+  accentCyanGlow: 'rgba(56, 189, 248, 0.25)',
+  accentViolet: '#818CF8',  // Indigo doux
+  accentAmber: '#C5A14D',   // Doré Officiel Budgeo (flèches et étoiles du logo)
   accentRose: '#F43F5E',
 
-  pocketFood: '#10B981',
-  pocketTransport: '#06B6D4',
-  pocketPleasure: '#8B5CF6',
-  pocketCushion: '#F59E0B',
+  pocketFood: '#25509F',    // Bleu Royal
+  pocketTransport: '#38BDF8',// Cyan
+  pocketPleasure: '#818CF8', // Indigo
+  pocketCushion: '#C5A14D',  // Or Budgeo
 
   textPrimary: '#FFFFFF',
   textSecondary: '#94A3B8',
   textMuted: '#64748B',
 
-  borderSubtle: 'rgba(255, 255, 255, 0.08)',
+  borderSubtle: 'rgba(37, 80, 159, 0.25)',
 };
 
 export const lightColors: ColorPalette = {
-  bgDeep: '#F8FAFC',        // Slate 50 ultra-clair
+  bgDeep: '#F4F7FC',        // Blanc bleuté très doux
   bgSurface: '#FFFFFF',     // Blanc pur
   bgCard: '#FFFFFF',        // Cartes blanches avec ombre
-  bgCardHover: '#F1F5F9',
-  bgInput: '#F1F5F9',       // Fond d'input gris très doux
+  bgCardHover: '#EBF1FB',
+  bgInput: '#EBF1FB',       // Fond d'input gris-bleu très doux
 
-  accentEmerald: '#059669', // Vert émeraude avec fort contraste WCAG
-  accentEmeraldGlow: 'rgba(5, 150, 105, 0.15)',
-  accentCyan: '#0891B2',
-  accentCyanGlow: 'rgba(8, 145, 178, 0.15)',
-  accentViolet: '#7C3AED',
-  accentAmber: '#D97706',
+  accentEmerald: '#1E4DA1', // Bleu Royal soutenu
+  accentEmeraldGlow: 'rgba(30, 77, 161, 0.2)',
+  accentCyan: '#0284C7',
+  accentCyanGlow: 'rgba(2, 132, 199, 0.15)',
+  accentViolet: '#6366F1',
+  accentAmber: '#C5A14D',   // Doré officiel Budgeo
   accentRose: '#E11D48',
 
-  pocketFood: '#059669',
-  pocketTransport: '#0891B2',
-  pocketPleasure: '#7C3AED',
-  pocketCushion: '#D97706',
+  pocketFood: '#1E4DA1',
+  pocketTransport: '#0284C7',
+  pocketPleasure: '#6366F1',
+  pocketCushion: '#C5A14D',
 
-  textPrimary: '#0F172A',   // Slate 900 noir doux
-  textSecondary: '#475569', // Slate 600
-  textMuted: '#64748B',     // Slate 500
+  textPrimary: '#072152',   // Bleu marine officiel du texte du logo Budgeo
+  textSecondary: '#2A4374', // Bleu ardoise
+  textMuted: '#5B729D',
 
-  borderSubtle: 'rgba(15, 23, 42, 0.08)',
+  borderSubtle: '#D1DEF2',
 };
 
 // Variable mutable par défaut pour compatibilité descendante

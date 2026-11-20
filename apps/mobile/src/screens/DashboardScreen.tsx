@@ -469,7 +469,7 @@ const styles = StyleSheet.create({
   ctaLabel: {
     fontSize: 15,
     fontWeight: '800',
-    color: '#051A14'
+    color: '#FFFFFF'
   },
   ctaBadge: {
     backgroundColor: 'rgba(0, 0, 0, 0.25)',

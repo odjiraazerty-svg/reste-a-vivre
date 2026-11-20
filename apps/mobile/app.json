@@ -5,8 +5,10 @@
     "version": "1.0.0",
     "orientation": "portrait",
     "userInterfaceStyle": "dark",
+    "icon": "./assets/icon.png",
     "splash": {
-      "backgroundColor": "#07090E",
+      "image": "./assets/splash.png",
+      "backgroundColor": "#FFFFFF",
       "resizeMode": "contain"
     },
     "ios": {
@@ -15,11 +17,16 @@
     },
     "android": {
       "package": "com.fintech.budgeo",
-      "usesCleartextTraffic": true
+      "usesCleartextTraffic": true,
+      "adaptiveIcon": {
+        "foregroundImage": "./assets/adaptive-icon.png",
+        "backgroundColor": "#25509F"
+      }
     },
     "web": {
       "name": "Budgéo — Budget Prédictif",
       "shortName": "Budgéo",
+      "favicon": "./assets/favicon.png",
       "bundler": "metro"
     }
   }

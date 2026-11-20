@@ -8,7 +8,8 @@ import {
   ActivityIndicator,
   KeyboardAvoidingView,
   Platform,
-  ScrollView
+  ScrollView,
+  Image
 } from 'react-native';
 import * as Haptics from 'expo-haptics';
 import { ApiService } from '../services/api';
@@ -139,13 +140,20 @@ export const AuthScreen: React.FC<AuthScreenProps> = ({ onAuthSuccess }) => {
       behavior={Platform.OS === 'ios' ? 'padding' : undefined}
     >
       <ScrollView contentContainerStyle={styles.scrollContent} keyboardShouldPersistTaps="handled">
-        {/* En-tête de marque */}
+        {/* En-tête de marque avec Logo Officiel */}
         <View style={styles.brandContainer}>
-          <View style={styles.logoBadge}>
-            <Text style={styles.logoIcon}>🛡️</Text>
-          </View>
+          <Image
+            source={require('../../assets/icon.png')}
+            style={styles.logoBadgeImage}
+            resizeMode="contain"
+          />
           <Text style={[styles.appName, { color: themeColors.textPrimary }]}>Budgéo</Text>
-          <Text style={[styles.appSubtitle, { color: themeColors.textSecondary }]}>Budget Prédictif</Text>
+          <Text style={[styles.appSubtitle, { color: themeColors.accentAmber }]}>
+            Budget Prédictif
+          </Text>
+          <Text style={[styles.brandCatchphrase, { color: themeColors.textSecondary }]}>
+            Le gestionnaire de votre portefeuille
+          </Text>
           <Text style={styles.securityTag}>100% Autonome • Zero Open-Banking</Text>
         </View>
 
@@ -349,38 +357,40 @@ const styles = StyleSheet.create({
   },
   brandContainer: {
     alignItems: 'center',
-    marginBottom: 20
+    marginBottom: 18
   },
-  logoBadge: {
-    width: 58,
-    height: 58,
-    borderRadius: 29,
-    backgroundColor: 'rgba(16, 185, 129, 0.15)',
-    borderWidth: 1.5,
-    borderColor: colors.accentEmerald,
-    alignItems: 'center',
-    justifyContent: 'center',
-    marginBottom: 8
-  },
-  logoIcon: {
-    fontSize: 28
+  logoBadgeImage: {
+    width: 72,
+    height: 72,
+    borderRadius: 20,
+    marginBottom: 10,
+    shadowColor: '#25509F',
+    shadowOffset: { width: 0, height: 8 },
+    shadowOpacity: 0.4,
+    shadowRadius: 14,
+    elevation: 8
   },
   appName: {
-    fontSize: 26,
+    fontSize: 27,
     fontWeight: '800',
     color: colors.textPrimary,
-    letterSpacing: 1.5
+    letterSpacing: 1.2
   },
   appSubtitle: {
     fontSize: 13,
-    fontWeight: '600',
-    color: colors.accentEmerald,
+    fontWeight: '700',
     marginTop: 2
   },
+  brandCatchphrase: {
+    fontSize: 11.5,
+    fontStyle: 'italic',
+    marginTop: 2,
+    marginBottom: 2
+  },
   securityTag: {
-    fontSize: 10,
+    fontSize: 9.5,
     color: colors.textMuted,
-    marginTop: 4,
+    marginTop: 3,
     textTransform: 'uppercase',
     letterSpacing: 0.5
   },
@@ -413,7 +423,7 @@ const styles = StyleSheet.create({
     color: colors.textMuted
   },
   tabTextActive: {
-    color: '#07090E',
+    color: '#FFFFFF',
     fontWeight: '800'
   },
   errorBox: {
@@ -612,7 +622,7 @@ const styles = StyleSheet.create({
     opacity: 0.6
   },
   submitBtnText: {
-    color: '#07090E',
+    color: '#FFFFFF',
     fontSize: 14.5,
     fontWeight: '800'
   },
