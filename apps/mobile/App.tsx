@@ -20,7 +20,37 @@ import { ApiService } from './src/services/api';
 import { ThemeProvider, useTheme } from './src/theme/ThemeContext';
 import { colors } from './src/theme/colors';
 
-const STATUSBAR_HEIGHT = Platform.OS === 'android' ? Math.max(RNStatusBar.currentHeight || 0, 38) : 44;
+const isWeb = Platform.OS === 'web';
+const STATUSBAR_HEIGHT = isWeb ? 0 : (Platform.OS === 'android' ? Math.max(RNStatusBar.currentHeight || 0, 38) : 44);
+
+function MobileSimulatorWrapper({ children, themeColors, isDark }: { children: React.ReactNode; themeColors: any; isDark: boolean }) {
+  if (!isWeb) {
+    return <View style={[styles.rootContainer, { backgroundColor: themeColors.bgDeep }]}>{children}</View>;
+  }
+
+  return (
+    <View style={styles.webBackdrop}>
+      {/* Chassis smartphone moderne */}
+      <View style={[
+        styles.phoneChassis,
+        {
+          backgroundColor: themeColors.bgDeep,
+          borderColor: isDark ? '#1F293D' : '#CBD5E1'
+        }
+      ]}>
+        {/* Dynamic Island */}
+        <View style={styles.islandRow}>
+          <View style={styles.dynamicIsland} />
+        </View>
+
+        {/* Écran du smartphone */}
+        <View style={[styles.phoneScreen, { backgroundColor: themeColors.bgDeep }]}>
+          {children}
+        </View>
+      </View>
+    </View>
+  );
+}
 
 export default function App() {
   return (
@@ -68,26 +98,28 @@ function MainApp() {
   // Écran de chargement initial
   if (isInitializing) {
     return (
-      <View style={[styles.rootContainer, styles.center, { backgroundColor: themeColors.bgDeep }]}>
-        <StatusBar style={isDark ? 'light' : 'dark'} />
-        <ActivityIndicator size="large" color={themeColors.accentEmerald} />
-      </View>
+      <MobileSimulatorWrapper themeColors={themeColors} isDark={isDark}>
+        <View style={[styles.rootContainer, styles.center, { backgroundColor: themeColors.bgDeep }]}>
+          <StatusBar style={isDark ? 'light' : 'dark'} />
+          <ActivityIndicator size="large" color={themeColors.accentEmerald} />
+        </View>
+      </MobileSimulatorWrapper>
     );
   }
 
   // Si non authentifié, afficher le formulaire de connexion / création de compte
   if (!currentUser) {
     return (
-      <View style={[styles.rootContainer, { backgroundColor: themeColors.bgDeep }]}>
+      <MobileSimulatorWrapper themeColors={themeColors} isDark={isDark}>
         <StatusBar style={isDark ? 'light' : 'dark'} translucent={false} backgroundColor={themeColors.bgDeep} />
         <AuthScreen onAuthSuccess={(user) => setCurrentUser(user)} />
-      </View>
+      </MobileSimulatorWrapper>
     );
   }
 
   // Utilisateur connecté : affichage de l'application principale
   return (
-    <View style={[styles.rootContainer, { backgroundColor: themeColors.bgDeep }]}>
+    <MobileSimulatorWrapper themeColors={themeColors} isDark={isDark}>
       <StatusBar style={isDark ? 'light' : 'dark'} translucent={false} backgroundColor={themeColors.bgDeep} />
 
       {/* Barre supérieure utilisateur avec sélecteur de thème & bouton déconnexion */}
@@ -193,11 +225,56 @@ function MainApp() {
           ]}>Activité</Text>
         </TouchableOpacity>
       </View>
-    </View>
+    </MobileSimulatorWrapper>
   );
 }
 
 const styles = StyleSheet.create({
+  webBackdrop: {
+    flex: 1,
+    width: '100%',
+    height: '100%',
+    backgroundColor: '#05070E',
+    justifyContent: 'center',
+    alignItems: 'center',
+    paddingVertical: 14,
+    paddingHorizontal: 10
+  },
+  phoneChassis: {
+    width: '100%',
+    maxWidth: 420,
+    height: '100%',
+    maxHeight: 890,
+    borderRadius: 44,
+    borderWidth: 8,
+    overflow: 'hidden',
+    position: 'relative',
+    shadowColor: '#000000',
+    shadowOffset: { width: 0, height: 25 },
+    shadowOpacity: 0.8,
+    shadowRadius: 35,
+    elevation: 30
+  },
+  islandRow: {
+    position: 'absolute',
+    top: 10,
+    left: 0,
+    right: 0,
+    alignItems: 'center',
+    zIndex: 9999
+  },
+  dynamicIsland: {
+    width: 90,
+    height: 20,
+    backgroundColor: '#000000',
+    borderRadius: 12
+  },
+  phoneScreen: {
+    flex: 1,
+    width: '100%',
+    height: '100%',
+    paddingTop: 14
+  },
   rootContainer: {
     flex: 1,
     backgroundColor: colors.bgDeep,
