@@ -38,10 +38,10 @@ export const cycleRoutes: FastifyPluginAsync = async (fastify) => {
 
       // 5. Dépenses d'aujourd'hui
       const todayExpenseRows = await query(
-        `SELECT pocket_key, COALESCE(SUM(amount), 0) AS amount
+        `SELECT pocket_id, COALESCE(SUM(amount), 0) AS amount
          FROM expenses
          WHERE cycle_id = $1 AND expense_date = CURRENT_DATE
-         GROUP BY pocket_key`,
+         GROUP BY pocket_id`,
         [cycle.id]
       );
 
@@ -49,7 +49,7 @@ export const cycleRoutes: FastifyPluginAsync = async (fastify) => {
       let spentToday = 0;
       for (const row of todayExpenseRows) {
         const amt = Number(row.amount);
-        spentTodayByPocket[row.pocket_key] = amt;
+        spentTodayByPocket[row.pocket_id] = amt;
         spentToday += amt;
       }
 
@@ -96,13 +96,21 @@ export const cycleRoutes: FastifyPluginAsync = async (fastify) => {
     const { userId } = request.user as { userId: string };
     const {
       declaredNetIncome,
-      totalFixedCharges,
+      totalFixedCharges: rawTotalFixed,
+      fixedCharges = [],
       sanctuarySavings,
       payDayOfMonth = 28,
       weekendStrategy = 'DYNAMIC_WEIGHT'
     } = request.body as any;
 
     try {
+      // Calcul du total des charges fixes si non fourni directement
+      const totalFixedCharges = rawTotalFixed !== undefined && rawTotalFixed !== null
+        ? Number(rawTotalFixed)
+        : Array.isArray(fixedCharges)
+          ? fixedCharges.reduce((acc: number, fc: any) => acc + (Number(fc.amount) || 0), 0)
+          : 0;
+
       const initialRavM = RavFormulas.calculateInitialRavM(
         declaredNetIncome,
         totalFixedCharges,
