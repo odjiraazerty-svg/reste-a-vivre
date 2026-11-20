@@ -16,6 +16,11 @@
     "android": {
       "package": "com.fintech.budgeo",
       "usesCleartextTraffic": true
+    },
+    "web": {
+      "name": "Budgéo — Budget Prédictif",
+      "shortName": "Budgéo",
+      "bundler": "metro"
     }
   }
 }

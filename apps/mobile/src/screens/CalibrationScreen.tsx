@@ -131,7 +131,7 @@ export const CalibrationScreen: React.FC<{ currentUser?: any; onCalibrationSaved
       } catch (e) {}
 
       setSaveSuccessMsg(
-        `Flux enregistrés avec succès ! Votre Reste À Vivre est désormais de ${computedDailyRav} ${currency} / jour (${ravm.toFixed(2)} ${currency} sur le cycle).`
+        `Flux enregistrés avec succès ! Votre Budget est désormais de ${computedDailyRav} ${currency} / jour (${ravm.toFixed(2)} ${currency} sur le cycle).`
       );
 
       if (onCalibrationSaved) {
@@ -141,7 +141,7 @@ export const CalibrationScreen: React.FC<{ currentUser?: any; onCalibrationSaved
       console.warn('Erreur sauvegarde calibration:', err);
       // Même en cas d'erreur réseau, la sauvegarde locale est effective
       setSaveSuccessMsg(
-        `Flux enregistrés en local ! Reste À Vivre calibré à ${computedDailyRav} ${currency} / jour.`
+        `Flux enregistrés en local ! Budget calibré à ${computedDailyRav} ${currency} / jour.`
       );
     } finally {
       setIsSaving(false);
@@ -153,7 +153,7 @@ export const CalibrationScreen: React.FC<{ currentUser?: any; onCalibrationSaved
       <ScrollView contentContainerStyle={styles.container}>
         <Text style={[styles.screenTitle, { color: themeColors.textPrimary }]}>Calibration des Flux</Text>
         <Text style={[styles.screenSubtitle, { color: themeColors.textSecondary }]}>
-          Modélisez votre Reste À Vivre sans liaison bancaire obligatoire.
+          Modélisez votre Budget sans liaison bancaire obligatoire.
         </Text>
 
         {/* Salaire Net */}

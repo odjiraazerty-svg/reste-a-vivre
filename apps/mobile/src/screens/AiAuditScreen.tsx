@@ -171,7 +171,7 @@ export const AiAuditScreen: React.FC<{ currentUser?: any }> = ({ currentUser }) 
     try {
       Haptics.notificationAsync(Haptics.NotificationFeedbackType.Success);
     } catch (e) { }
-    alert(`🎉 Félicitations ! Vos +${totalDailyGain.toLocaleString()} ${currency}/jour ont été réinjectés dans votre Reste À Vivre.`);
+    alert(`🎉 Félicitations ! Vos +${totalDailyGain.toLocaleString()} ${currency}/jour ont été réinjectés dans votre Budget.`);
   };
 
   return (
@@ -196,7 +196,7 @@ export const AiAuditScreen: React.FC<{ currentUser?: any }> = ({ currentUser }) 
             <Text style={styles.heroUnit}>/ jour</Text>
           </View>
           <Text style={[styles.heroSub, { color: themeColors.textSecondary }]}>
-            Soit <Text style={[styles.heroBold, { color: themeColors.textPrimary }]}>+{totalAnnualGain.toLocaleString()} {currency} / an</Text> réinjectés dans votre Reste À Vivre ou votre Pack Week-end !
+            Soit <Text style={[styles.heroBold, { color: themeColors.textPrimary }]}>+{totalAnnualGain.toLocaleString()} {currency} / an</Text> réinjectés dans votre Budget ou votre Pack Week-end !
           </Text>
         </View>
 
