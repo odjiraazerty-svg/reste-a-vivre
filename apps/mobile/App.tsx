@@ -67,13 +67,20 @@ function MainApp() {
   const [isInitializing, setIsInitializing] = useState(true);
 
   useEffect(() => {
-    // Au démarrage : afficher systématiquement le formulaire d'authentification
+    // Vérification de la session enregistrée sur le smartphone
     const initAuth = async () => {
       try {
-        await ApiService.logout();
-        setCurrentUser(null);
+        const storedUser = await StorageService.getCurrentUser();
+        const storedToken = await StorageService.getAuthToken();
+        if (storedUser && storedToken) {
+          ApiService.setAuthToken(storedToken);
+          setCurrentUser(storedUser);
+        } else {
+          setCurrentUser(null);
+        }
       } catch (e) {
-        console.warn('Erreur initialisation auth:', e);
+        console.warn('Erreur initialisation session:', e);
+        setCurrentUser(null);
       } finally {
         setIsInitializing(false);
       }

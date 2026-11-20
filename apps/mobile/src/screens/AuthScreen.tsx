@@ -123,17 +123,6 @@ export const AuthScreen: React.FC<AuthScreenProps> = ({ onAuthSuccess }) => {
     }
   };
 
-  const handleFillDemo = (usePseudo: boolean = true) => {
-    if (usePseudo) {
-      setIdentifier('alexandre');
-    } else {
-      setIdentifier('alexandre.dupont@entreprise.fr');
-    }
-    setPassword('password123');
-    setIsLoginMode(true);
-    setErrorMessage(null);
-  };
-
   return (
     <KeyboardAvoidingView
       style={[styles.container, { backgroundColor: themeColors.bgDeep }]}
@@ -199,7 +188,7 @@ export const AuthScreen: React.FC<AuthScreenProps> = ({ onAuthSuccess }) => {
             </View>
             <TextInput
               style={styles.input}
-              placeholder={isLoginMode ? "Ex: alexandre ou vous@email.com" : "Ex: mamadou, alexandre..."}
+              placeholder={isLoginMode ? "Ex: pseudo ou vous@email.com" : "Ex: votre pseudo ou email..."}
               placeholderTextColor={colors.textMuted}
               value={identifier}
               onChangeText={setIdentifier}
@@ -324,16 +313,6 @@ export const AuthScreen: React.FC<AuthScreenProps> = ({ onAuthSuccess }) => {
               </Text>
             )}
           </TouchableOpacity>
-
-          {/* Raccourcis Démo (Pseudo & Email) */}
-          <View style={styles.demoRow}>
-            <TouchableOpacity style={styles.demoChip} onPress={() => handleFillDemo(true)}>
-              <Text style={styles.demoChipText}>💡 Démo Pseudo ("alexandre")</Text>
-            </TouchableOpacity>
-            <TouchableOpacity style={styles.demoChip} onPress={() => handleFillDemo(false)}>
-              <Text style={styles.demoChipText}>📧 Démo Email</Text>
-            </TouchableOpacity>
-          </View>
         </View>
 
         {/* Mention de confidentialité */}
